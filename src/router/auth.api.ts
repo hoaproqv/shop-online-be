@@ -13,9 +13,8 @@ const router = express.Router()
 const registerRequestBodySchema = Joi.object()
   .keys({
     name: Joi.string().required(),
-    role: Joi.string().required().valid('admin', 'guest', 'registered'),
     email: Joi.string().required().email(),
-    password: Joi.string().required()
+    password: Joi.string().required().min(5)
   })
   .required()
   .options({ abortEarly: false })
