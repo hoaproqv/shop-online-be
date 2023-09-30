@@ -4,6 +4,9 @@ import cors from 'cors'
 import helmet from 'helmet'
 import mongoose from 'mongoose'
 import indexRouter from './router/index'
+import utilHelper from './utils/helpers'
+
+const { sendResponse, AppError } = utilHelper
 
 dotenv.config()
 
@@ -39,13 +42,41 @@ mongoose
     console.log(err)
   })
 
+/**
+ * Router
+ */
 app.use('/', indexRouter)
 
+/**
+ * Not found handler
+ */
 app.use((req: Request, res: Response, next: NextFunction) => {
-  const err = new Error('Not Found')
+  const err = new AppError(404, 'Not Found', 'Not Found Error')
   next(err)
 })
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  res.status(404).send(err.message)
+/**
+ * Error handler
+ */
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.log('ERROR', err)
+  if (err.isOperational) {
+    return sendResponse(
+      res,
+      err.statusCode ? err.statusCode : 500,
+      false,
+      null,
+      { message: err.message },
+      err.errorType
+    )
+  } else {
+    return sendResponse(
+      res,
+      err.statusCode ? err.statusCode : 500,
+      false,
+      null,
+      { message: err.message },
+      'Internal Server Error'
+    )
+  }
 })
