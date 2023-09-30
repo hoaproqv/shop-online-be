@@ -1,22 +1,28 @@
 import express from 'express'
 const router = express.Router()
-import users from './user.api'
-import products from './product.api'
-import carts from './cart.api'
-import category from './category.api'
-import delivery from './delivery.api'
-import auth from './auth.api'
 
-router.use('/auth', auth)
+//authApi
+import authApi from './auth.api'
+router.use('/auth', authApi)
 
-router.use('/user', users)
+//userApi
+import userApi from './user.api'
+router.use('/users', userApi)
 
-router.use('/product', products)
+//productApi
+import product from './product.api'
+router.use('/products', product)
 
-router.use('/cart', carts)
+//cartApi
+import cartApi from './cart.api'
+router.use('/carts', cartApi)
 
-router.use('/category', category)
+//categoryApi
+import categoryApi from './category.api'
+router.use('/categories', categoryApi)
 
-router.use('/delivery', delivery)
+//deliveryApi
+import deliveryApi from './delivery.api'
+router.use('/deliveries', deliveryApi)
 
 export default router
