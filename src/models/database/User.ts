@@ -16,7 +16,7 @@ interface IDUser extends Document {
 const userSchema: Schema<IDUser> = new mongoose.Schema<IDUser>(
   {
     name: { type: String, required: true },
-    role: { type: String, required: true, enum: ['admin', 'guest', 'registered'] },
+    role: { type: String, required: true, enum: ['admin', 'registered'] },
     email: { type: String, required: true },
     password: { type: String, required: true, select: false },
     isDeleted: { type: Boolean, default: false, select: false }
@@ -28,6 +28,7 @@ const userSchema: Schema<IDUser> = new mongoose.Schema<IDUser>(
 
 userSchema.methods.toJSON = function () {
   const user = this._doc
+  delete user.role
   delete user.password
   delete user.isDeleted
   return user
