@@ -23,7 +23,7 @@ router.post('/', loginRequired, adminAccess, createCategory)
 router.get('/', getCategory)
 
 /**
- * @router PUT /category
+ * @router PUT /category/:id
  * @description Update a category
  * @body {name, description}
  * @access Admin only
@@ -44,7 +44,7 @@ router.put(
 )
 
 /**
- * @router DELETE /category
+ * @router DELETE /category/:id
  * @description Delete a category
  * @body
  * @access Admin only
