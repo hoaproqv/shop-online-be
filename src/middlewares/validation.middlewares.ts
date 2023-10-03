@@ -18,6 +18,7 @@ const idParamsSchema = Joi.object().keys({
   id: Joi.string()
     .required()
     .regex(/^[a-z0-9]{24}$/)
+    .message('id must be 24 characters, a-z, 0-9')
 })
 
 export const validatedIdParams = validateRequest(idParamsSchema, 'params')

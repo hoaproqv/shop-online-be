@@ -1,17 +1,15 @@
 import mongoose from 'mongoose'
 
-const deliverySchema = new mongoose.Schema(
-  {
-    user: { type: String, require: true },
-    cart: { type: String, require: true },
-    status: { type: String, require: true, enum: ['created', 'delivered', 'success', 'return', 'cancel'] },
-    address: { type: String, require: true },
-    contact_number: { type: Number, require: true }
+const deliverySchema = new mongoose.Schema({
+  user_id: { type: String, require: true },
+  status: {
+    type: String,
+    enum: ['created', 'delivered', 'success', 'return', 'cancel'],
+    default: 'created'
   },
-  {
-    timestamps: true
-  }
-)
+  address: { type: String, require: true },
+  contact_number: { type: Number, require: true }
+})
 
 const Delivery = mongoose.model('Delivery', deliverySchema)
 
