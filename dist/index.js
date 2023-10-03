@@ -32,6 +32,8 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const index_1 = __importDefault(require("./router/index"));
+const helpers_1 = __importDefault(require("./utils/helpers"));
+const { sendResponse, AppError } = helpers_1.default;
 dotenv.config();
 /**
  * App Variables
@@ -53,14 +55,34 @@ app.listen(PORT, () => {
 /**
  * MongoDB connection
  */
-mongoose_1.default.connect(process.env.MONGODB_URI).then(() => {
+mongoose_1.default
+    .connect(process.env.MONGODB_URI)
+    .then(() => {
     console.log('Connected to MongoDB');
+})
+    .catch((err) => {
+    console.log(err);
 });
+/**
+ * Router
+ */
 app.use('/', index_1.default);
+/**
+ * Not found handler
+ */
 app.use((req, res, next) => {
-    const err = new Error('Not Found');
+    const err = new AppError(404, 'Not Found', 'Not Found Error');
     next(err);
 });
+/**
+ * Error handler
+ */
 app.use((err, req, res, next) => {
-    res.status(404).send(err.message);
+    console.log('ERROR', err);
+    if (err.isOperational) {
+        return sendResponse(res, err.statusCode ? err.statusCode : 500, false, null, { message: err.message }, err.errorType);
+    }
+    else {
+        return sendResponse(res, err.statusCode ? err.statusCode : 500, false, null, { message: err.message }, 'Internal Server Error');
+    }
 });
